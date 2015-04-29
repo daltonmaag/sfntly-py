@@ -1,3 +1,3 @@
 [submodule "sfntly"]
-	path = sfntly
+	path = vendor/sfntly
 	url = https://github.com/anthrotype/sfntly.git
