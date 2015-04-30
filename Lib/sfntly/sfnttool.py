@@ -4,11 +4,10 @@ Requires Java JRE7 or above.
 Usage:
 sfnttool.convert('eot', '/path/to/input.ttf', outfile='/path/to/output.eot')
 """
-from __future__ import print_function, absolute_import
-import os
-from sfntly.javaBridge import _runShell, JAVA_PATH, SFNTTOOL_PATH
-from damaTools.misc.py23 import *
+from __future__ import print_function, absolute_import, unicode_literals
 import sys
+import os
+from sfntly.javaBridge import _runShell, tounicode, JAVA_PATH, SFNTTOOL_PATH
 
 
 def convert(fmt, infile, outfile="", verbose=False, save_log=False):
@@ -34,23 +33,23 @@ def convert(fmt, infile, outfile="", verbose=False, save_log=False):
     outfile = os.path.abspath(outfile)
     savedir, _ = os.path.split(outfile)
     if not os.path.isfile(infile):
-        raise Exception('%s is not a file!' % infile)
+        raise Exception('%r is not a file!' % infile)
     if not os.path.exists(savedir):
         raise Exception('The folder "%s" does not exist!' % savedir)
     if fmt == "woff":
-        cmd = u'"%s" -jar "%s" -w "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
+        cmd = '"%s" -jar "%s" -w "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
                                                infile, outfile)
     elif fmt == "eot":
-        cmd = u'"%s" -jar "%s" -e -x "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
+        cmd = '"%s" -jar "%s" -e -x "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
                                                   infile, outfile)
     if verbose:
-        short_cmd = u'$ java -jar sfnttool.jar '
+        short_cmd = '$ java -jar sfnttool.jar '
         if fmt == "woff":
-            short_cmd += u'-w "%s" "%s"' % (infile, outfile)
+            short_cmd += '-w "%s" "%s"' % (infile, outfile)
         elif fmt == 'eot':
-            short_cmd += u'-e -x "%s" "%s"' % (infile, outfile)
+            short_cmd += '-e -x "%s" "%s"' % (infile, outfile)
         print(short_cmd)
-    retcode, stdout = _runShell(cmd)
+    retcode, stdout = _runShell(cmd, output_encoding='utf-8')
     if retcode != 0:
         if save_log:
             if not verbose:

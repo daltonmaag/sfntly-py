@@ -1,7 +1,7 @@
 """ This module is the bridge between Python and the sfntly Java tools.
 It uses subprocess.Popen to create a process that executes a Java program.
 """
-from __future__ import print_function
+from __future__ import print_function, absolute_import, unicode_literals
 import os
 import sys
 import subprocess
@@ -9,7 +9,6 @@ import shlex
 import traceback
 import locale
 from pkg_resources import resource_filename
-from damaTools.misc.py23 import *
 
 
 # The module expects 'sfnttool.jar' to be inside 'sfntly-java-dist' sub-folder.
@@ -18,18 +17,51 @@ if not os.path.isfile(SFNTTOOL_PATH):
     SFNTTOOL_PATH = None
 
 
-def _runShell(cmd):
+LOCALE = locale.getpreferredencoding()
+
+# python 2/3 compatibility layer
+
+try:
+    unicode
+except NameError:
+    unicode = str
+
+def tobytes(s, encoding='ascii'):
+    if not isinstance(s, bytes):
+        return s.encode(encoding)
+    else:
+        return s
+
+def tounicode(s, encoding='ascii'):
+    if not isinstance(s, unicode):
+        return s.decode(encoding)
+    else:
+        return s
+
+if str == bytes:
+    # python2
+    tostr = tobytes
+
+else:
+    # python3
+    tostr = tounicode
+
+
+def _runShell(cmd, input_encoding=LOCALE, output_encoding=LOCALE):
     """Run a shell cmd and return a tuple with its return code and output"""
-    try:
-        cmd = tostr(cmd, encoding=locale.getpreferredencoding())
-    except UnicodeEncodeError as e:
-        print("Error executing command: %s" % repr(cmd), file=sys.stderr)
-        traceback.print_exc(1, file=sys.stderr)
-        return (1, "")
+    if input_encoding:
+        try:
+            cmd = tostr(cmd, encoding=input_encoding)
+        except UnicodeEncodeError as e:
+            print("Error executing command: %s" % repr(cmd), file=sys.stderr)
+            traceback.print_exc(1, file=sys.stderr)
+            return (1, "")
     try:
         p = subprocess.Popen(
             shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        stdout = p.communicate()[0].decode('utf-8')
+        stdout = p.communicate()[0]
+        if output_encoding:
+            stdout = stdout.decode(output_encoding)
         retcode = p.wait()
         if stdout and stdout[-1:] == '\n':
             # remove trailing newline character
