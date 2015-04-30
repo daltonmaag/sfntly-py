@@ -2,6 +2,26 @@
 
 Python bindings for Google's [sfntly](https://code.google.com/p/sfntly) font manipulation library (Java).
 
+## Modules
+
+### sfntly.sfnttool
+
+* `convert`: call "sfnttool.jar" to convert the input font file to EOT or WOFF 1.0 formats. Return 0 if successful, else return error code and save traceback to log file.
+
+Example:
+
+```python
+    >>> from sfntly import sfnttool
+    # save WOFF in the same location of input font
+    >>> sfnttool.convert('woff', 'font.ttf')
+    0
+    # save EOT to destination 'outfile', and print more info to stdout
+    >>> sfnttool.convert('eot', 'font.ttf', outfile='webfonts/font.eot', verbose=True)
+    java -jar sfnttool.jar -e -x "font.ttf" "webfonts/font.eot"
+    EOT conversion failed! Plase read the 'snfttool_log.txt'
+    1
+```
+
 ## Requirements
 
 - Python 2.7 or above
