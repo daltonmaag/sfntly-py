@@ -31,7 +31,7 @@ def convert(fmt, infile, outfile="", verbose=False, save_log=True):
     else:
         outfile = tounicode(outfile, encoding=sys.getfilesystemencoding())
     outfile = os.path.abspath(outfile)
-    savedir, outname = os.path.split(outfile)
+    savedir, _ = os.path.split(outfile)
     if not os.path.isfile(infile):
         raise Exception('%s is not a file!' % infile)
     if not os.path.exists(savedir):
@@ -46,9 +46,9 @@ def convert(fmt, infile, outfile="", verbose=False, save_log=True):
         infname = os.path.basename(infile)
         short_cmd = 'java -jar sfnttool.jar '
         if fmt == "woff":
-            short_cmd += '-w "%s" "%s"' % (infname, outname)
+            short_cmd += '-w "%s" "%s"' % (infile, outfile)
         elif fmt == 'eot':
-            short_cmd += '-e -x "%s" "%s"' % (infname, outname)
+            short_cmd += '-e -x "%s" "%s"' % (infile, outfile)
         print(short_cmd)
     retcode, stdout = _runShell(cmd)
     if retcode != 0:
