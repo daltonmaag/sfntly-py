@@ -1,14 +1,17 @@
 # sfntly-py
 
-Python bindings for Google's [sfntly](https://code.google.com/p/sfntly) font manipulation library (Java).
+Python bindings for Google's[sfntly](https://code.google.com/p/sfntly), a font manipulation library written in Java.
 
-## Modules
+The package currently include the following modules:
 
-### sfntly.sfnttool
+#### sfntly.sfnttool
 
-* `convert`: call "sfnttool.jar" to convert the input font file to EOT or WOFF 1.0 formats. Return 0 if successful, else return error code.
-If 'verbose' is True, print messages to stdout/stderr.
-If 'save_log' is True, write exception traceback to a text file.
+* `convert(fmt, infile, outfile="", verbose=False, save_log=False)`
+
+    Use "sfnttool.jar" to convert the input font file 'infile' to format 'fmt'. Supported formats are EOT and WOFF 1.0.
+    Return 0 if successful, else return an error code.
+    If 'verbose' is True, print messages to stdout/stderr.
+    If 'save_log' is True, write exception traceback to a text file.
 
 Example:
 
