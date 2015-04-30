@@ -25,5 +25,4 @@ Pre-compiled Python wheels are available at:
     cd sfntly-py
     python setup.py build
 
-
-
+Please ensure the 'ant' executable can be found in the user's PATH variable.
