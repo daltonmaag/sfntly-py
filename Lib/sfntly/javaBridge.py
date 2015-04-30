@@ -7,15 +7,12 @@ import sys
 import subprocess
 import shlex
 import traceback
+from pkg_resources import resource_filename
 from damaTools.misc.py23 import *
 
 
-__dirname__ = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
-
-
 # The module expects 'sfnttool.jar' to be inside 'sfntly-java-dist' sub-folder.
-SFNTTOOL_PATH = os.path.join(__dirname__,
-                             'sfntly-java-dist/sfnttool.jar')
+SFNTTOOL_PATH = resource_filename('sfntly', 'sfntly-java-dist/sfnttool.jar')
 if not os.path.isfile(SFNTTOOL_PATH):
     SFNTTOOL_PATH = None
 
