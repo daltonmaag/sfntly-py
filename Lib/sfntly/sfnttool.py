@@ -11,11 +11,12 @@ from damaTools.misc.py23 import *
 import sys
 
 
-def convert(fmt, infile, outfile="", verbose=False, save_log=True):
+def convert(fmt, infile, outfile="", verbose=False, save_log=False):
     """Convert input file to either WOFF or EOT using sfnttool.jar.
     When no outfile is specified, the destination is saved in the same folder
     as infile.
-    Optionally save a log file when the tool fails to convert the webfont.
+    If 'verbose' is True, print messages to stdout or stderr.
+    Optionally 'save_log' to file when the command returns an error.
     """
     if not JAVA_PATH:
         raise Exception("Java executable not found")
@@ -37,30 +38,32 @@ def convert(fmt, infile, outfile="", verbose=False, save_log=True):
     if not os.path.exists(savedir):
         raise Exception('The folder "%s" does not exist!' % savedir)
     if fmt == "woff":
-        cmd = '"%s" -jar "%s" -w "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
+        cmd = u'"%s" -jar "%s" -w "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
                                                infile, outfile)
     elif fmt == "eot":
-        cmd = '"%s" -jar "%s" -e -x "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
+        cmd = u'"%s" -jar "%s" -e -x "%s" "%s"' % (JAVA_PATH, SFNTTOOL_PATH,
                                                   infile, outfile)
     if verbose:
-        infname = os.path.basename(infile)
-        short_cmd = 'java -jar sfnttool.jar '
+        short_cmd = u'$ java -jar sfnttool.jar '
         if fmt == "woff":
-            short_cmd += '-w "%s" "%s"' % (infile, outfile)
+            short_cmd += u'-w "%s" "%s"' % (infile, outfile)
         elif fmt == 'eot':
-            short_cmd += '-e -x "%s" "%s"' % (infile, outfile)
+            short_cmd += u'-e -x "%s" "%s"' % (infile, outfile)
         print(short_cmd)
     retcode, stdout = _runShell(cmd)
     if retcode != 0:
-        if verbose:
-            print("%s conversion failed! Plase read the 'snfttool_log.txt'" %
-                  fmt.upper())
-        if os.path.exists(outfile):
-            os.remove(outfile)
         if save_log:
+            if not verbose:
+                print("%s conversion failed! Plase read the 'snfttool_log.txt'" %
+                      fmt.upper(), file=sys.stderr)
+            from io import open
             msg = cmd+"\n"+stdout+"\n"
             logpath = os.path.join(savedir, "snfttool_log.txt")
-            logfile = open(logpath, 'a')
+            logfile = open(logpath, 'a', encoding='utf-8')
             logfile.write(msg)
             logfile.close()
+        if verbose:
+            print(stdout, file=sys.stderr)
+        if os.path.exists(outfile):
+            os.remove(outfile)
     return retcode

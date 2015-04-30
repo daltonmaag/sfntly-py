@@ -6,7 +6,9 @@ Python bindings for Google's [sfntly](https://code.google.com/p/sfntly) font man
 
 ### sfntly.sfnttool
 
-* `convert`: call "sfnttool.jar" to convert the input font file to EOT or WOFF 1.0 formats. Return 0 if successful, else return error code and save traceback to log file.
+* `convert`: call "sfnttool.jar" to convert the input font file to EOT or WOFF 1.0 formats. Return 0 if successful, else return error code.
+If 'verbose' is True, print messages to stdout/stderr.
+If 'save_log' is True, write exception traceback to a text file.
 
 Example:
 
@@ -17,8 +19,9 @@ Example:
     0
     # save EOT to destination 'outfile', and print more info to stdout
     >>> sfnttool.convert('eot', 'font.ttf', outfile='webfonts/font.eot', verbose=True)
-    java -jar sfnttool.jar -e -x "font.ttf" "webfonts/font.eot"
-    EOT conversion failed! Plase read the 'snfttool_log.txt'
+    $ java -jar sfnttool.jar -e -x "font.ttf" "webfonts/font.eot"
+    Exception in thread "main" java.lang.IllegalArgumentException: source table must not be null
+    [...]
     1
 ```
 

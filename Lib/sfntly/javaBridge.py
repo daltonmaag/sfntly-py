@@ -7,6 +7,7 @@ import sys
 import subprocess
 import shlex
 import traceback
+import locale
 from pkg_resources import resource_filename
 from damaTools.misc.py23 import *
 
@@ -19,7 +20,6 @@ if not os.path.isfile(SFNTTOOL_PATH):
 
 def _runShell(cmd):
     """Run a shell cmd and return a tuple with its return code and output"""
-    import locale
     try:
         cmd = tostr(cmd, encoding=locale.getpreferredencoding())
     except UnicodeEncodeError as e:
