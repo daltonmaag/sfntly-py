@@ -1,6 +1,6 @@
 # sfntly-py
 
-Python bindings for Google's[sfntly](https://code.google.com/p/sfntly), a font manipulation library written in Java.
+Python bindings for Google's [sfntly](https://code.google.com/p/sfntly), a font manipulation library written in Java.
 
 The package currently include the following modules:
 
