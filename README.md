@@ -50,5 +50,6 @@ Pre-compiled Python wheels are available at:
     git clone --recursive https://github.com/daltonmaag/sfntly-py.git
     cd sfntly-py
     python setup.py build
+    python setup.py install
 
 Please ensure the 'ant' executable can be found in the user's PATH variable.
