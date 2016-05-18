@@ -52,3 +52,15 @@ Pre-compiled Python wheels are available at:
     python setup.py build
 
 Please ensure the 'ant' executable can be found in the user's PATH variable.
+
+## Install instructions
+
+If you have built sfntly-py by following the above build instructions do:
+
+    python setup.py install
+
+*OR*
+
+If you have not built sfntly-py as above, simply do:
+
+    pip install --find-links https://github.com/daltonmaag/sfntly-py/releases/latest sfntly
